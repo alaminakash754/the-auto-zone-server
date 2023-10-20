@@ -44,6 +44,41 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/updatebrand/:id', async(req, res) => {
+      const id = req.params.id;
+      const query ={_id: new ObjectId(id)}
+      const result = await motoCollection.findOne(query);
+      res.send(result);
+    })
+
+    app.put('/updatebrand/:id', async(req, res) =>{
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const options = {upsert: true};
+      const updatedBrand = req.body;
+      const brand = {
+        $set: {
+          select:updatedBrand.select, 
+          brand:updatedBrand.brand, 
+          name:updatedBrand.name, 
+          image:updatedBrand.image, 
+          price:updatedBrand.price,  
+          rating:updatedBrand.rating
+        }
+      }
+      const result = await motoCollection.updateOne(filter, brand, options);
+      res.send(result);
+    })
+
+    
+
+    app.get('/eachbrand/:id', async(req, res) => {
+      const id = req.params.id;
+      const query ={_id: new ObjectId(id)}
+      const result = await motoCollection.findOne(query);
+      res.send(result);
+    })
+
     app.post('/motos', async(req, res) => {
         const newItems = req.body;
         console.log(newItems);
