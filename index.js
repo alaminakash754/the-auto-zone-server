@@ -30,6 +30,8 @@ async function run() {
     await client.connect();
 
     const motoCollection = client.db('motoDB').collection('moto');
+    const userCollection = client.db('motoDB').collection('user');
+
 
     app.get('/motos', async(req, res) => {
         const cursor = motoCollection.find();
@@ -44,14 +46,14 @@ async function run() {
       res.send(result);
     })
 
-    app.get('/updatebrand/:id', async(req, res) => {
+    app.get('/motos/:id', async(req, res) => {
       const id = req.params.id;
       const query ={_id: new ObjectId(id)}
       const result = await motoCollection.findOne(query);
       res.send(result);
     })
 
-    app.put('/updatebrand/:id', async(req, res) =>{
+    app.put('/motos/:id', async(req, res) =>{
       const id = req.params.id;
       const filter = {_id: new ObjectId(id)}
       const options = {upsert: true};
@@ -85,6 +87,20 @@ async function run() {
         const result = await motoCollection.insertOne(newItems);
         res.send(result);
     })
+
+    // user related API
+    app.post('/user', async(req, res) => {
+      const newUser = req.body;
+      console.log(newUser);
+      const result = await userCollection.insertOne(newUser);
+      res.send(result);
+  })
+
+
+
+
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
