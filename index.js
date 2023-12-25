@@ -31,6 +31,7 @@ async function run() {
 
     const motoCollection = client.db('motoDB').collection('moto');
     const userCollection = client.db('motoDB').collection('user');
+    const cartCollection = client.db('motoDB').collection('cart');
     
 
 
@@ -96,6 +97,14 @@ async function run() {
       res.send(result);
   })
 
+
+  // cart related api
+  app.post('/cart', async(req, res) => {
+    const cartItems = req.body;
+    console.log(cartItems);
+    const result = await cartCollection.insertOne(cartItems);
+    res.send(result);
+})
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
